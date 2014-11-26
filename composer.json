@@ -1,0 +1,27 @@
+{
+	"name": "oefenweb/cakephp-uni-login",
+	"description": "A UNI•Login (Authentication ) Plugin for CakePHP",
+	"type": "cakephp-plugin",
+	"keywords": [
+		"cakephp", "authentication"
+	],
+	"homepage": "http://github.com/Oefenweb/cakephp-uni-login",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Oefenweb.nl BV team",
+			"homepage": "https://github.com/Oefenweb/cakephp-uni-login/contributors"
+		}
+	],
+	"require": {
+		"php": ">=5.3.10",
+		"composer/installers": "~1.0"
+	},
+	"support": {
+		"issues": "https://github.com/Oefenweb/cakephp-uni-login/issues",
+		"source": "https://github.com/Oefenweb/cakephp-uni-login"
+	},
+	"extra": {
+		"installer-name": "UniLogin"
+	}
+}
