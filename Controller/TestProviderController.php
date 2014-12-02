@@ -8,7 +8,7 @@ App::uses('UniLoginUtil', 'UniLogin.Lib');
 class TestProviderController extends UniLoginAppController {
 
 /**
- *
+ * Creates the redirect url based on query-parameter of configuration
  *
  * @return mixed
  */
@@ -30,7 +30,7 @@ class TestProviderController extends UniLoginAppController {
 	}
 
 /**
- *
+ * Handles authentication requests
  *
  * @return void
  */

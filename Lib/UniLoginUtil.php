@@ -26,8 +26,8 @@ class UniLoginUtil {
 /**
  * Calculate Uni Login fingerprint
  *
- * @param string $timestamp
- * @param string $user
+ * @param string $formattedTimestamp Uni-Login formatted timestamp (YYYYMMDDhhmmss)
+ * @param string $user A username
  * @return string
  */
 	public static function calculateFingerprint($formattedTimestamp, $user) {
@@ -36,12 +36,12 @@ class UniLoginUtil {
 	}
 
 /**
- * Validate Uni Login fingerprint
+ * Validates Uni Login fingerprint
  *
- * @param unknown $formattedTimestamp
- * @param unknown $user
- * @param unknown $fingerprint
- * @return boolean
+ * @param string $formattedTimestamp Uni-Login formatted timestamp (YYYYMMDDhhmmss)
+ * @param string $user A username
+ * @param string $fingerprint Fingerprint to validate
+ * @return bool
  */
 	public static function validateFingerprint($formattedTimestamp, $user, $fingerprint) {
 		$restore = self::_switchTimeZone();
@@ -63,6 +63,12 @@ class UniLoginUtil {
 		return $isValid;
 	}
 
+/**
+ * Formats given (or current) timestamp to Uni-Login formatted timestamp
+ *
+ * @param string $timestamp Unix timestamp
+ * @return string Uni-Login formatted timestamp (YYYYMMDDhhmmss)
+ */
 	public static function getFormattedTimestamp($timestamp = null) {
 		$restore = self::_switchTimeZone();
 
@@ -76,6 +82,12 @@ class UniLoginUtil {
 		return $result;
 	}
 
+/**
+ * Parses given Uni-Login timestamp
+ *
+ * @param string $formattedTimestamp Uni-login formatted timestamp
+ * @return mixed Returns a timestamp on success, false otherwise
+ */
 	public static function parseFormattedTimestamp($formattedTimestamp) {
 		$restore = self::_switchTimeZone();
 
@@ -86,6 +98,11 @@ class UniLoginUtil {
 		return $result;
 	}
 
+/**
+ * Returns url of the authentication provider
+ *
+ * @return string Url of the authentication provider
+ */
 	public static function getProviderUrl() {
 		$url = Configure::read('UniLogin.providerUrl');
 		$applicationId = Configure::read('UniLogin.applicationId');
@@ -93,25 +110,43 @@ class UniLoginUtil {
 		return $url;
 	}
 
+/**
+ * Calculates fingerprint for given url
+ *
+ * @param string $url Url to create fingerprint for
+ * @return string Fingerprint
+ */
 	public static function calculateUrlFingerprint($url) {
 		$secret = Configure::read('UniLogin.secret');
 		return md5($url . $secret);
 	}
 
+/**
+ * Decodes given url
+ *
+ * @param string $url Encoded url
+ * @return string Decoded url
+ */
 	public static function decodeUrl($url) {
 		return base64_decode(urldecode($url));
 	}
 
+/**
+ * Encodes given url
+ *
+ * @param string $url Decoded url
+ * @return string Encoded url
+ */
 	public static function encodeUrl($url) {
 		return urlencode(base64_encode($url));
 	}
 
 /**
- * Validate Uni Login url fingerprint
+ * Validates Uni-Login fingerprint for given url
  *
- * @param unknown $url
- * @param unknown $fingerprint
- * @return boolean
+ * @param string $url Given url
+ * @param string $fingerprint Fingerprint to validate
+ * @return bool Whether or not the fingerprint validates
  */
 	public static function validateUrlFingerprint($url, $fingerprint) {
 		return (self::calculateUrlFingerprint($url) === $fingerprint);
