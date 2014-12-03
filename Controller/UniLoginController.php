@@ -14,6 +14,11 @@ class UniLoginController extends UniLoginAppController {
  */
 	public $uses = array();
 
+/**
+ * Starts the Uni-Login login process (by redirecting the user to the authentication provider)
+ *
+ * @return void
+ */
 	public function login() {
 		$query = array();
 		if ($returnUrl = $this->request->query('returnUrl')) {
@@ -33,6 +38,7 @@ class UniLoginController extends UniLoginAppController {
 
 /**
  * Receives auth response and does validation
+ *
  * @return void
  */
 	public function callback() {
