@@ -158,7 +158,7 @@ class UniLoginUtilTest extends CakeTestCase {
  */
 	public function testEncodeUrl() {
 		$url = 'http://www.emu.dk/appl';
-		$expected = 'aHR0cDovL3d3dy5lbXUuZGsvYXBwbA%3D%3D';
+		$expected = 'aHR0cDovL3d3dy5lbXUuZGsvYXBwbA==';
 		$result = UniLoginUtil::encodeUrl($url);
 		$this->assertEquals($expected, $result);
 	}
