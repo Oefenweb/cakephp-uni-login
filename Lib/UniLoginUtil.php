@@ -138,7 +138,7 @@ class UniLoginUtil {
  * @return string Encoded url
  */
 	public static function encodeUrl($url) {
-		return urlencode(base64_encode($url));
+		return base64_encode($url);
 	}
 
 /**
