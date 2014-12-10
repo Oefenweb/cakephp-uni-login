@@ -20,20 +20,24 @@ class UniLoginController extends UniLoginAppController {
  * @return void
  */
 	public function login() {
-		$query = array();
+		// default callback url
+		$url = array('action' => 'callback');
 		if ($returnUrl = $this->request->query('returnUrl')) {
-			$path = UniLoginUtil::encodeUrl($returnUrl);
-			$auth = UniLoginUtil::calculateUrlFingerprint($returnUrl);
-
-			$query['path'] = $path;
-			$query['auth'] = $auth;
+			$url = $returnUrl;
 		}
 
-		$url = Configure::read('UniLogin.providerUrl');
-		$query['id'] = Configure::read('UniLogin.applicationId');
-		$url .= '?' . http_build_query($query);
+		$url = Router::url($url, true);
 
-		return $this->redirect($url);
+		$query = array(
+			'path' => UniLoginUtil::encodeUrl($url),
+			'auth' => UniLoginUtil::calculateUrlFingerprint($url),
+			'id' => Configure::read('UniLogin.applicationId')
+		);
+
+		$redirectUrl = Configure::read('UniLogin.providerUrl');
+		$redirectUrl .= '?' . http_build_query($query);
+
+		return $this->redirect($redirectUrl);
 	}
 
 /**
