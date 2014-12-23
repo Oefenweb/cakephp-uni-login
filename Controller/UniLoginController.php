@@ -70,7 +70,8 @@ class UniLoginController extends UniLoginAppController {
 			$completeUrl = Router::url('/users/uni_login_complete');
 		}
 
-		if ($returnUrl = $this->request->query('returnUrl')) {
+		$returnUrl = $this->request->query('returnUrl');
+		if ($returnUrl) {
 			$completeUrl = $returnUrl;
 		}
 
