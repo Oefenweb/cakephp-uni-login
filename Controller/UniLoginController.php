@@ -23,7 +23,9 @@ class UniLoginController extends UniLoginAppController {
 		// default callback url
 		$url = array('action' => 'callback');
 		if ($returnUrl = $this->request->query('returnUrl')) {
-			$url = $returnUrl;
+			$url['?'] = array(
+				'returnUrl' => Router::url($returnUrl)
+			);
 		}
 
 		$url = Router::url($url, true);
@@ -60,12 +62,16 @@ class UniLoginController extends UniLoginAppController {
 			$response['validated'] = false;
 		}
 
-		// Redirect user to /users/uni_login_complete
+		// Redirect user to action in application
 		// with validated response data available as POST data
 		// retrievable at $this->data at your app's controller
 		$completeUrl = Configure::read('UniLogin._cakephp_plugin_complete_url');
 		if (empty($completeUrl)) {
 			$completeUrl = Router::url('/users/uni_login_complete');
+		}
+
+		if ($returnUrl = $this->request->query('returnUrl')) {
+			$completeUrl = $returnUrl;
 		}
 
 		$response['secret'] = Configure::read('UniLogin._cakephp_plugin_secret');
