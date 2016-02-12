@@ -1,39 +1,47 @@
 <?php
-App::uses('View', 'View');
 App::uses('UniLoginUtil', 'UniLogin.Lib');
 
 /**
- * UniLoginUtilTest class
+ * UniLoginUtilTest class.
+ *
  */
 class UniLoginUtilTest extends CakeTestCase {
 
+/**
+ * Contains the original plugin configuration.
+ *
+ * @var array|null
+ */
 	protected $_restore = null;
 
 /**
- * setUp method
+ * setUp method.
  *
  * @return void
  */
 	public function setUp() {
 		parent::setUp();
+
 		$this->_restore = Configure::read('UniLogin');
-		Configure::write('UniLogin.secret', 'abc123');
-		Configure::write('UniLogin.providerUrl', 'https://sso.emu.dk/unilogin/login.cgi?id=%s');
-		Configure::write('UniLogin.applicationId', 'myId');
+
+		Configure::write('UniLogin.provider.secret', 'abc123');
+		Configure::write('UniLogin.provider.url', 'https://sso.emu.dk/unilogin/login.cgi?id=%s');
+		Configure::write('UniLogin.provider.applicationId', 'myId');
 	}
 
 /**
- * tearDown method
+ * tearDown method.
  *
  * @return void
  */
 	public function tearDown() {
 		parent::tearDown();
+
 		Configure::write('UniLogin', $this->_restore);
 	}
 
 /**
- * testCalculateFingerprint method
+ * Tests `UniLoginUtil::calculateFingerprint`.
  *
  * @return void
  */
@@ -42,11 +50,12 @@ class UniLoginUtilTest extends CakeTestCase {
 		$user = 'testuser';
 		$expected = '5e55280df202c8820a7092746b991088';
 		$result = UniLoginUtil::calculateFingerprint($timestamp, $user);
+
 		$this->assertEquals($expected, $result);
 	}
 
 /**
- * testGetTimestamp method
+ * Tests `UniLoginUtil::getFormattedTimestamp`.
  *
  * @return void
  */
@@ -54,11 +63,12 @@ class UniLoginUtilTest extends CakeTestCase {
 		$timestamp = 1052139592;
 		$expected = '20030505125952';
 		$result = UniLoginUtil::getFormattedTimestamp($timestamp);
+
 		$this->assertEquals($expected, $result);
 	}
 
 /**
- * testParseTimestamp method
+ * Tests `UniLoginUtil::parseFormattedTimestamp`.
  *
  * @return void
  */
@@ -66,69 +76,67 @@ class UniLoginUtilTest extends CakeTestCase {
 		$timestamp = '20030505125952';
 		$expected = 1052139592;
 		$result = UniLoginUtil::parseFormattedTimestamp($timestamp);
+
 		$this->assertEquals($expected, $result);
 	}
 
 /**
- * testValidateFingerprint method
+ * Tests `UniLoginUtil::validateFingerprint`.
  *
  * @return void
  */
 	public function testValidateFingerprint() {
-		//
-		// good timestamp
-		//
+		// Good timestamp
 		$timestamp = time();
 		$formattedTimestamp = UniLoginUtil::getFormattedTimestamp($timestamp);
 		$user = 'testuser';
 		$fingerprint = UniLoginUtil::calculateFingerprint($formattedTimestamp, $user);
 		$result = UniLoginUtil::validateFingerprint($formattedTimestamp, $user, $fingerprint);
+
 		$this->assertTrue($result);
 
-		//
-		// timestamp in the future
-		//
+		// Timestamp in the future
 		$timestamp = strtotime('+5 minutes');
 		$formattedTimestamp = UniLoginUtil::getFormattedTimestamp($timestamp);
 		$user = 'testuser';
 		$fingerprint = UniLoginUtil::calculateFingerprint($formattedTimestamp, $user);
 		$result = UniLoginUtil::validateFingerprint($formattedTimestamp, $user, $fingerprint);
+
 		$this->assertFalse($result);
 
-		//
-		// timestamp in the past within 1 minute
-		//
+		// Timestamp in the past within 1 minute
 		$timestamp = strtotime('-30 seconds');
 		$formattedTimestamp = UniLoginUtil::getFormattedTimestamp($timestamp);
 		$user = 'testuser';
 		$fingerprint = UniLoginUtil::calculateFingerprint($formattedTimestamp, $user);
 		$result = UniLoginUtil::validateFingerprint($formattedTimestamp, $user, $fingerprint);
+
 		$this->assertTrue($result);
 
-		//
-		// timestamp in the past more than 1 minute ago
-		//
+		// Timestamp in the past more than 1 minute ago
 		$timestamp = strtotime('-2 minutes');
 		$formattedTimestamp = UniLoginUtil::getFormattedTimestamp($timestamp);
 		$user = 'testuser';
 		$fingerprint = UniLoginUtil::calculateFingerprint($formattedTimestamp, $user);
 		$result = UniLoginUtil::validateFingerprint($formattedTimestamp, $user, $fingerprint);
+
 		$this->assertFalse($result);
 	}
 
 /**
- * testGetProviderUrl method
+ * Tests `UniLoginUtil::getProviderUrl`.
  *
  * @return void
  */
 	public function testGetProviderUrl() {
 		$expected = 'https://sso.emu.dk/unilogin/login.cgi?id=myId';
 		$result = UniLoginUtil::getProviderUrl();
+
 		$this->assertEquals($expected, $result);
 	}
 
 /**
- * testCalculateUrlFingerprint method
+ * Tests `UniLoginUtil::calculateUrlFingerprint`.
  *
  * @return void
  */
@@ -136,11 +144,12 @@ class UniLoginUtilTest extends CakeTestCase {
 		$url = 'http://www.emu.dk/appl';
 		$expected = '59169cb39fab40cb0ad6ade6a6eb491e';
 		$result = UniLoginUtil::calculateUrlFingerprint($url);
+
 		$this->assertEquals($expected, $result);
 	}
 
 /**
- * testDecodeUrl method
+ * Tests `UniLoginUtil::decodeUrl`.
  *
  * @return void
  */
@@ -148,11 +157,12 @@ class UniLoginUtilTest extends CakeTestCase {
 		$url = 'aHR0cDovL3d3dy5lbXUuZGsvYXBwbA%3D%3D';
 		$expected = 'http://www.emu.dk/appl';
 		$result = UniLoginUtil::decodeUrl($url);
+
 		$this->assertEquals($expected, $result);
 	}
 
 /**
- * testEncodeUrl method
+ * Tests `UniLoginUtil::encodeUrl`.
  *
  * @return void
  */
@@ -160,11 +170,12 @@ class UniLoginUtilTest extends CakeTestCase {
 		$url = 'http://www.emu.dk/appl';
 		$expected = 'aHR0cDovL3d3dy5lbXUuZGsvYXBwbA==';
 		$result = UniLoginUtil::encodeUrl($url);
+
 		$this->assertEquals($expected, $result);
 	}
 
 /**
- * testValidateUrlFingerprint method
+ * Tests `UniLoginUtil::validateUrlFingerprint`.
  *
  * @return void
  */
@@ -172,6 +183,7 @@ class UniLoginUtilTest extends CakeTestCase {
 		$url = 'http://www.emu.dk/appl';
 		$fingerprint = '59169cb39fab40cb0ad6ade6a6eb491e';
 		$result = UniLoginUtil::validateUrlFingerprint($url, $fingerprint);
+
 		$this->assertTrue($result);
 	}
 
