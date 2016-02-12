@@ -5,9 +5,20 @@
  */
 class UniLoginUtil {
 
-	// YYYYMMDDhhmmss
+/**
+ * The timestamp format.
+ *
+ * @var string
+ */
 	const TIMESTAMP_FORMAT = 'YmdHis';
 
+/**
+ * The fingerprint timeout.
+ *
+ *   Determines how long app -> provider -> app (plugin) may take.
+ *
+ * @var string
+ */
 	const FINGERPRINT_TIMEOUT = '-1 minute';
 
 /**
@@ -15,7 +26,7 @@ class UniLoginUtil {
  *
  * @param string $timeZone The new time zone identifier
  * @return string The old time zone identifier
- * @todo Time zone should be application wide set to UTC (in core.php)?
+ * @todo Time zone should be application wide set to UTC
  */
 	protected static function _switchTimeZone($timeZone = 'UTC') {
 		$restore = date_default_timezone_get();
@@ -27,9 +38,9 @@ class UniLoginUtil {
 /**
  * Calculate Uni Login fingerprint.
  *
- * @param string $formattedTimestamp Uni-Login formatted timestamp (YYYYMMDDhhmmss)
+ * @param string $formattedTimestamp Uni-Login formatted timestamp
  * @param string $user A username
- * @return string
+ * @return string A fingerprint
  */
 	public static function calculateFingerprint($formattedTimestamp, $user) {
 		$secret = Configure::read('UniLogin.provider.secret');
@@ -40,10 +51,10 @@ class UniLoginUtil {
 /**
  * Validates Uni Login fingerprint.
  *
- * @param string $formattedTimestamp Uni-Login formatted timestamp (YYYYMMDDhhmmss)
+ * @param string $formattedTimestamp Uni-Login formatted timestamp
  * @param string $user A username
  * @param string $fingerprint Fingerprint to validate
- * @return bool
+ * @return bool Whether or not the fingerprint validates
  */
 	public static function validateFingerprint($formattedTimestamp, $user, $fingerprint) {
 		$restore = self::_switchTimeZone();
@@ -52,7 +63,7 @@ class UniLoginUtil {
 		$now = time();
 		$timestamp = self::parseFormattedTimestamp($formattedTimestamp);
 
-		// Given timestamp should be between 10 minutes ago and now
+		// Given timestamp should be between 1 minute ago and now
 		if (($timestamp <= $now) && ($timestamp > strtotime(self::FINGERPRINT_TIMEOUT, $now))) {
 			// Check fingerprint
 			if (self::calculateFingerprint($formattedTimestamp, $user) === $fingerprint) {
@@ -69,7 +80,7 @@ class UniLoginUtil {
  * Formats given (or current) timestamp to Uni-Login formatted timestamp.
  *
  * @param string $timestamp Unix timestamp
- * @return string Uni-Login formatted timestamp (YYYYMMDDhhmmss)
+ * @return string Uni-Login formatted timestamp
  */
 	public static function getFormattedTimestamp($timestamp = null) {
 		$restore = self::_switchTimeZone();
@@ -116,7 +127,7 @@ class UniLoginUtil {
  * Calculates fingerprint for given url.
  *
  * @param string $url Url to create fingerprint for
- * @return string Fingerprint
+ * @return string A fingerprint
  */
 	public static function calculateUrlFingerprint($url) {
 		$secret = Configure::read('UniLogin.provider.secret');
