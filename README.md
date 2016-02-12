@@ -5,7 +5,7 @@
 ## Requirements
 
 * CakePHP 2.4.2 or greater.
-* PHP 5.3.10 or greater.
+* PHP 5.4.16 or greater.
 
 ## Installation
 
@@ -22,6 +22,13 @@ CakePlugin::load('UniLogin');
 Ensure to configure the following lines in `app/Config/bootstrap.php`:
 
 ```
+Configure::write('UniLogin.providerUrl', '/uni_login/test_provider/authenticate');
+Configure::write('UniLogin.applicationId', '1');
+Configure::write('UniLogin.secret', 'secret');
+
+Configure::write('UniLogin.provider.defaultRedirectUrl', '/uni_login/uni_login/callback');
+Configure::write('UniLogin.provider.applicationId', '1');
+Configure::write('UniLogin.provider.testUser', 'testUser');
 ```
 
 ## Usage
