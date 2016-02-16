@@ -2,7 +2,7 @@
 App::uses('UniLoginUtil', 'UniLogin.Lib');
 
 /**
- * UniLogin Controller
+ * UniLogin Controller.
  *
  */
 class UniLoginController extends UniLoginAppController {
@@ -15,14 +15,15 @@ class UniLoginController extends UniLoginAppController {
 	public $uses = array();
 
 /**
- * Starts the Uni-Login login process (by redirecting the user to the authentication provider)
+ * Starts the Uni-Login login process (by redirecting the user to the authentication provider).
  *
  * @return void
  */
 	public function login() {
-		// default callback url
+		// Default callback url
 		$url = array('action' => 'callback');
-		if ($returnUrl = $this->request->query('returnUrl')) {
+		$returnUrl = $this->request->query('returnUrl');
+		if ($returnUrl) {
 			$url['?'] = array(
 				'returnUrl' => Router::url($returnUrl)
 			);
@@ -33,49 +34,42 @@ class UniLoginController extends UniLoginAppController {
 		$query = array(
 			'path' => UniLoginUtil::encodeUrl($url),
 			'auth' => UniLoginUtil::calculateUrlFingerprint($url),
-			'id' => Configure::read('UniLogin.applicationId')
+			'id' => Configure::read('UniLogin.provider.applicationId')
 		);
 
-		$redirectUrl = Configure::read('UniLogin.providerUrl');
+		$redirectUrl = Configure::read('UniLogin.provider.url');
 		$redirectUrl .= '?' . http_build_query($query);
 
 		return $this->redirect($redirectUrl);
 	}
 
 /**
- * Receives auth response and does validation
+ * Receives auth response and does validation.
  *
  * @return void
  */
 	public function callback() {
-		$response = null;
-
 		$response = $this->request->query;
 
 		$user = $this->request->query('user');
 		$timestamp = $this->request->query('timestamp');
 		$auth = $this->request->query('auth');
-		if ($user && $timestamp && $auth
-				&& ($auth === UniLoginUtil::calculateFingerprint($timestamp, $user))) {
+		if ($user && $timestamp && $auth && ($auth === UniLoginUtil::calculateFingerprint($timestamp, $user))) {
 			$response['validated'] = true;
 		} else {
 			$response['validated'] = false;
 		}
 
-		// Redirect user to action in application
-		// with validated response data available as POST data
-		// retrievable at $this->data at your app's controller
-		$completeUrl = Configure::read('UniLogin._cakephp_plugin_complete_url');
-		if (empty($completeUrl)) {
-			$completeUrl = Router::url('/users/uni_login_complete');
-		}
+		// Redirect user to action in application with validated response data available as POST data retrievable at
+		// `$this->request->data` at your app's controller.
+		$completeUrl = Configure::read('UniLogin.application.completeUrl');
 
 		$returnUrl = $this->request->query('returnUrl');
 		if ($returnUrl) {
 			$completeUrl = $returnUrl;
 		}
 
-		$response['secret'] = Configure::read('UniLogin._cakephp_plugin_secret');
+		$response['secret'] = Configure::read('UniLogin.application.secret');
 
 		$CakeRequest = new CakeRequest($completeUrl);
 		$CakeRequest->data = $response;

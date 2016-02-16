@@ -3,11 +3,16 @@ App::uses('TestProviderController', 'UniLogin.Controller');
 App::uses('UniLoginUtil', 'UniLogin.Lib');
 
 /**
- * TestProviderController Test Case
+ * TestProviderController Test Case.
  *
  */
 class TestProviderControllerTest extends ControllerTestCase {
 
+/**
+ * Contains the original plugin configuration.
+ *
+ * @var array|null
+ */
 	protected $_restore = null;
 
 /**
@@ -18,9 +23,10 @@ class TestProviderControllerTest extends ControllerTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->_restore = Configure::read('UniLogin.provider');
-		Configure::write('UniLogin.provider.defaultRedirectUrl', 'http://www.example.com/redirectUrl');
-		Configure::write('UniLogin.provider.applicationId', 'myApplicationId');
+		$this->_restore = Configure::read('UniLogin.testProvider');
+
+		Configure::write('UniLogin.testProvider.defaultRedirectUrl', 'http://www.example.com/redirectUrl');
+		Configure::write('UniLogin.testProvider.applicationId', 'myApplicationId');
 	}
 
 /**
@@ -29,7 +35,7 @@ class TestProviderControllerTest extends ControllerTestCase {
  * @return void
  */
 	public function tearDown() {
-		Configure::write('UniLogin.provider', $this->_restore);
+		Configure::write('UniLogin.testProvider', $this->_restore);
 
 		parent::tearDown();
 	}

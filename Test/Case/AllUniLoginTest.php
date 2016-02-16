@@ -1,11 +1,12 @@
 <?php
 /**
- * All UniLogin plugin tests
+ * All UniLogin plugin tests.
+ *
  */
 class AllUniLoginTest extends CakeTestCase {
 
 /**
- * Suite define the tests for this plugin
+ * Suite define the tests for this plugin.
  *
  * @return void
  */

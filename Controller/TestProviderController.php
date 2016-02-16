@@ -2,13 +2,13 @@
 App::uses('UniLoginUtil', 'UniLogin.Lib');
 
 /**
- * TestProvider Controller
+ * TestProvider Controller.
  *
  */
 class TestProviderController extends UniLoginAppController {
 
 /**
- * Creates the redirect url based on query-parameter of configuration
+ * Creates the redirect url based on query-parameter of configuration.
  *
  * @return mixed
  */
@@ -23,14 +23,14 @@ class TestProviderController extends UniLoginAppController {
 		}
 
 		if (empty($redirectUrl)) {
-			$redirectUrl = Configure::read('UniLogin.provider.defaultRedirectUrl');
+			$redirectUrl = Configure::read('UniLogin.testProvider.defaultRedirectUrl');
 		}
 
 		return $redirectUrl;
 	}
 
 /**
- * Handles authentication requests
+ * Handles authentication requests.
  *
  * @return void
  */
@@ -40,10 +40,10 @@ class TestProviderController extends UniLoginAppController {
 		$redirectUrl = $this->_getRedirectUrl();
 
 		$timestamp = UniLoginUtil::getFormattedTimestamp();
-		$user = Configure::read('UniLogin.provider.testUser');
+		$user = Configure::read('UniLogin.testProvider.user');
 		$auth = UniLoginUtil::calculateFingerprint($timestamp, $user);
 
-		if ($applicationId === Configure::read('UniLogin.provider.applicationId')) {
+		if ($applicationId === Configure::read('UniLogin.testProvider.applicationId')) {
 			$query = array(
 				'user' => $user,
 				'timestamp' => $timestamp,
