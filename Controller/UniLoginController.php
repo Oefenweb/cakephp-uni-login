@@ -12,7 +12,7 @@ class UniLoginController extends UniLoginAppController {
  *
  * @var array
  */
-	public $uses = array();
+	public $uses = [];
 
 /**
  * Starts the Uni-Login login process (by redirecting the user to the authentication provider).
@@ -21,21 +21,21 @@ class UniLoginController extends UniLoginAppController {
  */
 	public function login() {
 		// Default callback url
-		$url = array('action' => 'callback');
+		$url = ['action' => 'callback'];
 		$returnUrl = $this->request->query('returnUrl');
 		if ($returnUrl) {
-			$url['?'] = array(
+			$url['?'] = [
 				'returnUrl' => Router::url($returnUrl)
-			);
+			];
 		}
 
 		$url = Router::url($url, true);
 
-		$query = array(
+		$query = [
 			'path' => UniLoginUtil::encodeUrl($url),
 			'auth' => UniLoginUtil::calculateUrlFingerprint($url),
 			'id' => Configure::read('UniLogin.provider.applicationId')
-		);
+		];
 
 		$redirectUrl = Configure::read('UniLogin.provider.url');
 		$redirectUrl .= '?' . http_build_query($query);

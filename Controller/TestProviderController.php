@@ -44,11 +44,11 @@ class TestProviderController extends UniLoginAppController {
 		$auth = UniLoginUtil::calculateFingerprint($timestamp, $user);
 
 		if ($applicationId === Configure::read('UniLogin.testProvider.applicationId')) {
-			$query = array(
+			$query = [
 				'user' => $user,
 				'timestamp' => $timestamp,
 				'auth' => $auth
-			);
+			];
 			$redirectUrl .= '?' . http_build_query($query);
 		}
 
