@@ -12,7 +12,7 @@ class UniLoginAppController extends AppController {
  *
  * @var array
  */
-	public $uses = array();
+	public $uses = [];
 
 /**
  * Before action logic.

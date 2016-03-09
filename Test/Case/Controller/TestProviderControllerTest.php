@@ -48,12 +48,12 @@ class TestProviderControllerTest extends ControllerTestCase {
 	public function testAuthenticateDefaultUrl() {
 		$defaultRedirectUrl = 'http://www.example.com/redirectUrl';
 
-		$this->testAction('/uni_login/test_provider/authenticate', array(
-			'data' => array(
+		$this->testAction('/uni_login/test_provider/authenticate', [
+			'data' => [
 				'id' => 'myApplicationId'
-			),
+			],
 			'method' => 'get'
-		));
+		]);
 
 		$this->assertContains($defaultRedirectUrl, $this->headers['Location']);
 		$this->assertContains('user=', $this->headers['Location']);
@@ -69,9 +69,9 @@ class TestProviderControllerTest extends ControllerTestCase {
 	public function testAuthenticateDefaultUrlWithoutApplicationId() {
 		$defaultRedirectUrl = 'http://www.example.com/redirectUrl';
 
-		$this->testAction('/uni_login/test_provider/authenticate', array(
+		$this->testAction('/uni_login/test_provider/authenticate', [
 			'method' => 'get'
-		));
+		]);
 
 		$this->assertContains($defaultRedirectUrl, $this->headers['Location']);
 		$this->assertNotContains('user=', $this->headers['Location']);
@@ -88,14 +88,14 @@ class TestProviderControllerTest extends ControllerTestCase {
 		$url = 'http://www.mydomain.com';
 		$path = UniLoginUtil::encodeUrl($url);
 		$auth = UniLoginUtil::calculateUrlFingerprint($url);
-		$this->testAction('/uni_login/test_provider/authenticate', array(
-			'data' => array(
+		$this->testAction('/uni_login/test_provider/authenticate', [
+			'data' => [
 				'id' => 'myApplicationId',
 				'path' => $path,
 				'auth' => $auth
-			),
+			],
 			'method' => 'get'
-		));
+		]);
 
 		$this->assertContains($url, $this->headers['Location']);
 		$this->assertContains('user=', $this->headers['Location']);
@@ -112,13 +112,13 @@ class TestProviderControllerTest extends ControllerTestCase {
 		$url = 'http://www.mydomain.com';
 		$path = UniLoginUtil::encodeUrl($url);
 		$auth = UniLoginUtil::calculateUrlFingerprint($url);
-		$this->testAction('/uni_login/test_provider/authenticate', array(
-			'data' => array(
+		$this->testAction('/uni_login/test_provider/authenticate', [
+			'data' => [
 				'path' => $path,
 				'auth' => $auth
-			),
+			],
 			'method' => 'get'
-		));
+		]);
 
 		$this->assertContains($url, $this->headers['Location']);
 		$this->assertNotContains('user=', $this->headers['Location']);
