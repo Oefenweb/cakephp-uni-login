@@ -66,7 +66,7 @@ class UniLoginUtil {
 		// Given timestamp should be between 1 minute ago and now
 		if (($timestamp <= $now) && ($timestamp > strtotime(self::FINGERPRINT_TIMEOUT, $now))) {
 			// Check fingerprint
-			if (self::calculateFingerprint($formattedTimestamp, $user) === $fingerprint) {
+			if (self::hashEquals(self::calculateFingerprint($formattedTimestamp, $user), $fingerprint)) {
 				$isValid = true;
 			}
 		}
@@ -163,7 +163,26 @@ class UniLoginUtil {
  * @return bool Whether or not the fingerprint validates
  */
 	public static function validateUrlFingerprint($url, $fingerprint) {
-		return self::calculateUrlFingerprint($url) === $fingerprint;
+		return self::hashEquals(self::calculateUrlFingerprint($url), $fingerprint);
+	}
+
+/**
+ * Timing attack safe string comparison
+ *
+ *  Makes hash_equals functionality available in PHP < 5.6
+ *
+ * @param string $knownString The string of known length to compare against
+ * @param string $userString The user-supplied string
+ * @return bool Whether or not the two strings are equal
+ * @see hash_equals
+ */
+	public static function hashEquals($knownString, $userString) {
+		if (!function_exists('hash_equals')) {
+			$ret = strlen($knownString) ^ strlen($userString);
+			$ret |= array_sum(unpack("C*", $knownString ^ $userString));
+			return !$ret;
+		}
+		return hash_equals($knownString, $userString);
 	}
 
 }
