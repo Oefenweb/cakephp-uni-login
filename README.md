@@ -52,7 +52,7 @@ class UsersController extends AppController {
 
 	public function login_complete() {
 		$secret = Configure::read('UniLogin.application.secret');
-		if ($this->request->data('secret') !== $secret) {
+		if (!hash_equals($secret, $this->request->data('secret'))) {
 			throw new ForbiddenException();
 		}
 
