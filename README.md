@@ -39,5 +39,33 @@ Configure::write('UniLogin.testProvider.user', 'testUser');
 
 ## Usage
 
+### Minimal setup for UniLogin login procedure
+
 ```
+class UsersController extends AppController {
+
+	public function login_start() {
+		$returnUrl = Router::url(['action' => 'login_complete']);
+		$url = ['plugin' => 'uni_login', 'controller' => 'uni_login', 'action' => 'login', '?' => ['returnUrl' => $returnUrl]];
+		return $this->redirect($url);
+	}
+
+	public function login_complete() {
+		$secret = Configure::read('UniLogin.application.secret');
+		if ($this->request->data('secret') !== $secret) {
+			throw new ForbiddenException();
+		}
+
+		if ($this->request->data('validated') === true) {
+			$key = $this->request->data('user');
+
+			// find application user by key and login user
+
+		}
+	}
+
+}
+
 ```
+* action "login_start" starts the UniLogin login procedure
+* action "login_complete" handles the callback from UniLogin
