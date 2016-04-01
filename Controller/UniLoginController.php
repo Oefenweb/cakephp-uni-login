@@ -54,7 +54,7 @@ class UniLoginController extends UniLoginAppController {
 		$user = $this->request->query('user');
 		$timestamp = $this->request->query('timestamp');
 		$auth = $this->request->query('auth');
-		if ($user && $timestamp && $auth && ($auth === UniLoginUtil::calculateFingerprint($timestamp, $user))) {
+		if ($user && $timestamp && $auth && (UniLoginUtil::hashEquals(UniLoginUtil::calculateFingerprint($timestamp, $user), $auth))) {
 			$response['validated'] = true;
 		} else {
 			$response['validated'] = false;
