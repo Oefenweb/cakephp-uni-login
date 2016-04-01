@@ -60,8 +60,6 @@ class UniLoginController extends UniLoginAppController {
 			$response['validated'] = false;
 		}
 
-		// Redirect user to action in application with validated response data available as POST data retrievable at
-		// `$this->request->data` at your app's controller.
 		$completeUrl = Configure::read('UniLogin.application.completeUrl');
 
 		$returnUrl = $this->request->query('returnUrl');
@@ -71,12 +69,25 @@ class UniLoginController extends UniLoginAppController {
 
 		$response['secret'] = Configure::read('UniLogin.application.secret');
 
-		$CakeRequest = new CakeRequest($completeUrl);
-		$CakeRequest->data = $response;
+		return $this->_dispatch($completeUrl, $response);
+	}
+
+/**
+ * Redirects user to action in application with validated response data available as POST data retrievable at
+ * $this->request->data` at your app's controller.
+ *
+ * @param string $url Url in application to dispatch to
+ * @param array $data A list with post data
+ * @return void
+ */
+	protected function _dispatch($url, $data) {
+		$CakeRequest = new CakeRequest($url);
+		$CakeRequest->data = $data;
 
 		$Dispatcher = new Dispatcher();
 		$Dispatcher->dispatch($CakeRequest, new CakeResponse());
-		exit();
+
+		$this->_stop();
 	}
 
 }
