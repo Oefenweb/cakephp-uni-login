@@ -64,13 +64,12 @@ class UsersController extends AppController {
 		if ($this->request->data('validated') === true) {
 			$key = $this->request->data('user');
 
-			// find application user by key and login user
-
+			// Find application user by key and login user
 		}
 	}
 
 }
 
 ```
-* action "login_start" starts the UniLogin login procedure
-* action "login_complete" handles the callback from UniLogin
+
+The `UsersController::login_start` starts the UniLogin login procedure, the `UsersController::login_complete` handles the callback from UniLogin.
