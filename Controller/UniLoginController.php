@@ -86,7 +86,8 @@ class UniLoginController extends UniLoginAppController {
 
 		$Dispatcher = new Dispatcher();
 		$Dispatcher->dispatch($CakeRequest, new CakeResponse());
-		exit();
+
+		$this->_stop();
 	}
 
 }
