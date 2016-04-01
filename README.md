@@ -2,6 +2,11 @@
 
 [![Build Status](https://travis-ci.org/Oefenweb/cakephp-uni-login.png?branch=master)](https://travis-ci.org/Oefenweb/cakephp-uni-login) [![Coverage Status](https://coveralls.io/repos/Oefenweb/cakephp-uni-login/badge.png)](https://coveralls.io/r/Oefenweb/cakephp-uni-login) [![Packagist downloads](http://img.shields.io/packagist/dt/Oefenweb/cakephp-uni-login.svg)](https://packagist.org/packages/oefenweb/cakephp-uni-login) [![Code Climate](https://codeclimate.com/github/Oefenweb/cakephp-uni-login/badges/gpa.svg)](https://codeclimate.com/github/Oefenweb/cakephp-uni-login)
 
+This plugin handles (single sign on) authentication with
+[UNI•Login](http://www.stil.dk/It-og-administration/Brugere-og-adgangsstyring/For-laerere-og-elever). UNI•Login is a
+service that provides authentication, access control and user administration to providers of web-based applications in
+the educational sector.
+
 ## Requirements
 
 * CakePHP 2.4.2 or greater.
@@ -39,5 +44,33 @@ Configure::write('UniLogin.testProvider.user', 'testUser');
 
 ## Usage
 
+### Minimal setup for UniLogin login procedure
+
 ```
+class UsersController extends AppController {
+
+	public function login_start() {
+		$returnUrl = Router::url(['action' => 'login_complete']);
+		$url = ['plugin' => 'uni_login', 'controller' => 'uni_login', 'action' => 'login', '?' => ['returnUrl' => $returnUrl]];
+		return $this->redirect($url);
+	}
+
+	public function login_complete() {
+		$secret = Configure::read('UniLogin.application.secret');
+		if (!hash_equals($secret, $this->request->data('secret'))) {
+			throw new ForbiddenException();
+		}
+
+		if ($this->request->data('validated') === true) {
+			$key = $this->request->data('user');
+
+			// find application user by key and login user
+
+		}
+	}
+
+}
+
 ```
+* action "login_start" starts the UniLogin login procedure
+* action "login_complete" handles the callback from UniLogin
