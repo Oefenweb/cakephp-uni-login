@@ -175,6 +175,7 @@ class UniLoginUtil {
  * @param string $userString The user-supplied string
  * @return bool Whether or not the two strings are equal
  * @see hash_equals
+ * @suppress PhanTypeMismatchArgumentInternal
  */
 	public static function hashEquals($knownString, $userString) {
 		if (!function_exists('hash_equals')) {

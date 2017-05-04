@@ -17,7 +17,7 @@ class UniLoginController extends UniLoginAppController {
 /**
  * Starts the Uni-Login login process (by redirecting the user to the authentication provider).
  *
- * @return void
+ * @return \Cake\Network\Response|null
  */
 	public function login() {
 		// Default callback url

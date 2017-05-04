@@ -32,7 +32,7 @@ class TestProviderController extends UniLoginAppController {
 /**
  * Handles authentication requests.
  *
- * @return void
+ * @return \Cake\Network\Response|null
  */
 	public function authenticate() {
 		$applicationId = $this->request->query('id');
