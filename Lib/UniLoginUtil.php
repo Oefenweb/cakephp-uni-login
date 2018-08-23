@@ -41,6 +41,7 @@ class UniLoginUtil {
  * @param string $formattedTimestamp Uni-Login formatted timestamp
  * @param string $user A username
  * @return string A fingerprint
+ * @see https://en.wikipedia.org/wiki/Length_extension_attack
  */
 	public static function calculateFingerprint($formattedTimestamp, $user) {
 		$secret = Configure::read('UniLogin.provider.secret');
