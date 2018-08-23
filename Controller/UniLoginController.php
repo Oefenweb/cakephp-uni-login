@@ -24,8 +24,9 @@ class UniLoginController extends UniLoginAppController {
 		$url = ['action' => 'callback'];
 		$returnUrl = $this->request->query('returnUrl');
 		if ($returnUrl) {
+			$path = parse_url($returnUrl, PHP_URL_PATH);
 			$url['?'] = [
-				'returnUrl' => Router::url($returnUrl)
+				'returnUrl' => Router::url($path),
 			];
 		}
 
@@ -92,5 +93,4 @@ class UniLoginController extends UniLoginAppController {
 
 		$this->_stop();
 	}
-
 }
