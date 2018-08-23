@@ -71,7 +71,7 @@ class UniLoginController extends UniLoginAppController {
 			$completeUrl = $returnUrl;
 		}
 
-		$response['secret'] = Configure::read('UniLogin.application.secret');
+		$response['hmac'] = UniLoginUtil::hmac($response);
 
 		return $this->_dispatch($completeUrl, $response);
 	}

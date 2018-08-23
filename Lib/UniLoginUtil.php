@@ -166,4 +166,16 @@ class UniLoginUtil {
 	public static function validateUrlFingerprint($url, $fingerprint) {
 		return hash_equals(self::calculateUrlFingerprint($url), $fingerprint);
 	}
+
+/**
+ * Calculates HMAC (sha256) for data.
+ *
+ * @param array $data (Response) data
+ * @return string HMAC
+ */
+	public static function hmac(array $data = []) {
+		$secret = Configure::read('UniLogin.application.secret');
+
+		return hash_hmac('sha256', implode('-', $data), $secret);
+	}
 }

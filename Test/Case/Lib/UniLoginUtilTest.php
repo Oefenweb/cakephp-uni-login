@@ -186,4 +186,26 @@ class UniLoginUtilTest extends CakeTestCase {
 
 		$this->assertTrue($actual);
 	}
+
+/**
+ * Tests `hmac`.
+ *
+ * @return void
+ */
+	public function testHmac() {
+		$timestamp = strtotime('-2 minutes');
+		$formattedTimestamp = UniLoginUtil::getFormattedTimestamp($timestamp);
+		$user = 'testuser';
+
+		$data = [
+			'user' => 'testuser',
+			'timestamp' => 1535028701,
+			'auth' => '28241D17887D43328077A8046F210491',
+			'validated' => 1,
+		];
+		$expected = 'effb812bb240a7ef7b8741cda9894529f84bc365e79ebe00eb0f255b97b36646';
+		$actual = UniLoginUtil::hmac($data);
+
+		$this->assertEquals($expected, $actual);
+	}
 }
