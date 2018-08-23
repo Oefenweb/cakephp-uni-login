@@ -186,27 +186,4 @@ class UniLoginUtilTest extends CakeTestCase {
 
 		$this->assertTrue($result);
 	}
-
-/**
- * Tests `UniLoginUtil::hashEquals`.
- *
- * @return void
- */
-	public function testHashEquals() {
-		$knownString = 'abc';
-		$userString = 'abc';
-		$result = UniLoginUtil::hashEquals($knownString, $userString);
-		$this->assertTrue($result);
-
-		$knownString = 'abcde';
-		$userString = 'abc';
-		$result = UniLoginUtil::hashEquals($knownString, $userString);
-		$this->assertFalse($result);
-
-		$knownString = 'abc';
-		$userString = 'def';
-		$result = UniLoginUtil::hashEquals($knownString, $userString);
-		$this->assertFalse($result);
-	}
-
 }
