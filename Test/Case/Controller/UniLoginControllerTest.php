@@ -42,7 +42,7 @@ class TestUniLoginControllerTest extends ControllerTestCase {
 	}
 
 /**
- * testLogin method
+ * Tests `/uni_login/uni_login/login`.
  *
  * @return void
  */
@@ -54,7 +54,9 @@ class TestUniLoginControllerTest extends ControllerTestCase {
 	}
 
 /**
- * testCallbackNotValid method
+ * Tests `/uni_login/uni_login/callback`.
+ *
+ *  Not valid.
  *
  * @return void
  */
@@ -69,7 +71,9 @@ class TestUniLoginControllerTest extends ControllerTestCase {
 	}
 
 /**
- * testCallbackValid method
+ * Tests `/uni_login/uni_login/callback`.
+ *
+ *  Valid.
  *
  * @return void
  */

@@ -41,7 +41,9 @@ class TestProviderControllerTest extends ControllerTestCase {
 	}
 
 /**
- * testAuthenticateDefaultUrl method
+ * Tests `/uni_login/test_provider/authenticate`.
+ *
+ *  Default URL.
  *
  * @return void
  */
@@ -50,9 +52,9 @@ class TestProviderControllerTest extends ControllerTestCase {
 
 		$this->testAction('/uni_login/test_provider/authenticate', [
 			'data' => [
-				'id' => 'myApplicationId'
+				'id' => 'myApplicationId',
 			],
-			'method' => 'get'
+			'method' => 'get',
 		]);
 
 		$this->assertContains($defaultRedirectUrl, $this->headers['Location']);
@@ -62,7 +64,9 @@ class TestProviderControllerTest extends ControllerTestCase {
 	}
 
 /**
- * testAuthenticateDefaultUrlWithoutApplicationId method
+ * Tests `/uni_login/test_provider/authenticate`.
+ *
+ *  Default URL without application ID.
  *
  * @return void
  */
@@ -70,7 +74,7 @@ class TestProviderControllerTest extends ControllerTestCase {
 		$defaultRedirectUrl = 'http://www.example.com/redirectUrl';
 
 		$this->testAction('/uni_login/test_provider/authenticate', [
-			'method' => 'get'
+			'method' => 'get',
 		]);
 
 		$this->assertContains($defaultRedirectUrl, $this->headers['Location']);
@@ -80,7 +84,9 @@ class TestProviderControllerTest extends ControllerTestCase {
 	}
 
 /**
- * testAuthenticateRedirectUrlParameterWithoutApplicationId method
+ * Tests `/uni_login/test_provider/authenticate`.
+ *
+ *  Redirect URL parameter.
  *
  * @return void
  */
@@ -92,9 +98,9 @@ class TestProviderControllerTest extends ControllerTestCase {
 			'data' => [
 				'id' => 'myApplicationId',
 				'path' => $path,
-				'auth' => $auth
+				'auth' => $auth,
 			],
-			'method' => 'get'
+			'method' => 'get',
 		]);
 
 		$this->assertContains($url, $this->headers['Location']);
@@ -104,7 +110,9 @@ class TestProviderControllerTest extends ControllerTestCase {
 	}
 
 /**
- * testAuthenticateRedirectUrlParameterWithoutApplicationId method
+ * Tests `/uni_login/test_provider/authenticate`.
+ *
+ *  Redirect URL parameter without application ID.
  *
  * @return void
  */
@@ -115,7 +123,7 @@ class TestProviderControllerTest extends ControllerTestCase {
 		$this->testAction('/uni_login/test_provider/authenticate', [
 			'data' => [
 				'path' => $path,
-				'auth' => $auth
+				'auth' => $auth,
 			],
 			'method' => 'get'
 		]);
@@ -125,5 +133,4 @@ class TestProviderControllerTest extends ControllerTestCase {
 		$this->assertNotContains('timestamp=', $this->headers['Location']);
 		$this->assertNotContains('auth=', $this->headers['Location']);
 	}
-
 }
