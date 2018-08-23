@@ -88,11 +88,13 @@ class TestUniLoginControllerTest extends ControllerTestCase {
 			'user' => $user,
 			'timestamp' => $formattedTimestamp,
 			'auth' => $fingerprint,
+			'validated' => true,
 		];
+		$hmac = UniLoginUtil::hmac($data);
 
 		$UniLogin->expects($this->once())
 			->method('_dispatch')
-			->with('/completeUrl', array_merge($data, ['validated' => true, 'secret' => 'secret']));
+			->with('/completeUrl', array_merge($data, ['hmac' => $hmac]));
 
 		$this->testAction('/uni_login/uni_login/callback', ['method' => 'get', 'data' => $data]);
 	}
