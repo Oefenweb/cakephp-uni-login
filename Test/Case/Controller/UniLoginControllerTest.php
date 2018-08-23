@@ -77,10 +77,13 @@ class TestUniLoginControllerTest extends ControllerTestCase {
 		$UniLogin = $this->generate('UniLogin', ['methods' => ['_dispatch']]);
 
 		$timestamp = time();
+		$formattedTimestamp = UniLoginUtil::getFormattedTimestamp($timestamp);
+		$user = 'user';
+		$fingerprint = UniLoginUtil::calculateFingerprint($formattedTimestamp, $user);
 		$data = [
-			'user' => 'user',
-			'timestamp' => $timestamp,
-			'auth' => md5($timestamp . 'abc123' . 'user')
+			'user' => $user,
+			'timestamp' => $formattedTimestamp,
+			'auth' => $fingerprint,
 		];
 
 		$UniLogin->expects($this->once())
@@ -89,5 +92,4 @@ class TestUniLoginControllerTest extends ControllerTestCase {
 
 		$this->testAction('/uni_login/uni_login/callback', ['method' => 'get', 'data' => $data]);
 	}
-
 }
