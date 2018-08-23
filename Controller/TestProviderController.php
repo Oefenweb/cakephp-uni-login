@@ -43,16 +43,15 @@ class TestProviderController extends UniLoginAppController {
 		$user = Configure::read('UniLogin.testProvider.user');
 		$auth = UniLoginUtil::calculateFingerprint($timestamp, $user);
 
-		if ($applicationId === Configure::read('UniLogin.testProvider.applicationId')) {
+		if (hash_equals(Configure::read('UniLogin.testProvider.applicationId'), $applicationId)) {
 			$query = [
 				'user' => $user,
 				'timestamp' => $timestamp,
-				'auth' => $auth
+				'auth' => $auth,
 			];
 			$redirectUrl .= '?' . http_build_query($query);
 		}
 
 		return $this->redirect($redirectUrl);
 	}
-
 }
