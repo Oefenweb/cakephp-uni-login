@@ -26,7 +26,7 @@ class UniLoginController extends UniLoginAppController {
 		if ($returnUrl) {
 			$path = parse_url($returnUrl, PHP_URL_PATH);
 			$url['?'] = [
-				'returnUrl' => Router::url($path),
+				'returnUrl' => $path,
 			];
 		}
 
@@ -68,7 +68,8 @@ class UniLoginController extends UniLoginAppController {
 
 		$returnUrl = $this->request->query('returnUrl');
 		if ($returnUrl) {
-			$completeUrl = $returnUrl;
+			$path = parse_url($returnUrl, PHP_URL_PATH);
+			$completeUrl = $path;
 		}
 
 		$response['hmac'] = UniLoginUtil::hmac($response);
