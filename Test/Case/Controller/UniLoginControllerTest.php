@@ -63,9 +63,12 @@ class TestUniLoginControllerTest extends ControllerTestCase {
 	public function testCallbackNotValid() {
 		$UniLogin = $this->generate('UniLogin', ['methods' => ['_dispatch']]);
 
+		$data = ['validated' => false];
+		$hmac = UniLoginUtil::hmac($data);
+
 		$UniLogin->expects($this->once())
 			->method('_dispatch')
-			->with('/completeUrl', ['validated' => false, 'secret' => 'secret']);
+			->with('/completeUrl', array_merge($data, ['hmac' => $hmac]));
 
 		$this->testAction('/uni_login/uni_login/callback', ['method' => 'get']);
 	}
