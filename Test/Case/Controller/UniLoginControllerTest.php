@@ -42,7 +42,7 @@ class TestUniLoginControllerTest extends ControllerTestCase {
 	}
 
 /**
- * testLogin method
+ * Tests `/uni_login/uni_login/login`.
  *
  * @return void
  */
@@ -54,22 +54,29 @@ class TestUniLoginControllerTest extends ControllerTestCase {
 	}
 
 /**
- * testCallbackNotValid method
+ * Tests `/uni_login/uni_login/callback`.
+ *
+ *  Not valid.
  *
  * @return void
  */
 	public function testCallbackNotValid() {
 		$UniLogin = $this->generate('UniLogin', ['methods' => ['_dispatch']]);
 
+		$data = ['validated' => false];
+		$hmac = UniLoginUtil::hmac($data);
+
 		$UniLogin->expects($this->once())
 			->method('_dispatch')
-			->with('/completeUrl', ['validated' => false, 'secret' => 'secret']);
+			->with('/completeUrl', array_merge($data, ['hmac' => $hmac]));
 
 		$this->testAction('/uni_login/uni_login/callback', ['method' => 'get']);
 	}
 
 /**
- * testCallbackValid method
+ * Tests `/uni_login/uni_login/callback`.
+ *
+ *  Valid.
  *
  * @return void
  */
@@ -77,17 +84,21 @@ class TestUniLoginControllerTest extends ControllerTestCase {
 		$UniLogin = $this->generate('UniLogin', ['methods' => ['_dispatch']]);
 
 		$timestamp = time();
+		$formattedTimestamp = UniLoginUtil::getFormattedTimestamp($timestamp);
+		$user = 'user';
+		$fingerprint = UniLoginUtil::calculateFingerprint($formattedTimestamp, $user);
 		$data = [
-			'user' => 'user',
-			'timestamp' => $timestamp,
-			'auth' => md5($timestamp . 'abc123' . 'user')
+			'user' => $user,
+			'timestamp' => $formattedTimestamp,
+			'auth' => $fingerprint,
+			'validated' => true,
 		];
+		$hmac = UniLoginUtil::hmac($data);
 
 		$UniLogin->expects($this->once())
 			->method('_dispatch')
-			->with('/completeUrl', array_merge($data, ['validated' => true, 'secret' => 'secret']));
+			->with('/completeUrl', array_merge($data, ['hmac' => $hmac]));
 
 		$this->testAction('/uni_login/uni_login/callback', ['method' => 'get', 'data' => $data]);
 	}
-
 }

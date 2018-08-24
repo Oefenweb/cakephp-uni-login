@@ -24,8 +24,9 @@ class UniLoginController extends UniLoginAppController {
 		$url = ['action' => 'callback'];
 		$returnUrl = $this->request->query('returnUrl');
 		if ($returnUrl) {
+			$path = parse_url($returnUrl, PHP_URL_PATH);
 			$url['?'] = [
-				'returnUrl' => Router::url($returnUrl)
+				'returnUrl' => $path,
 			];
 		}
 
@@ -54,7 +55,10 @@ class UniLoginController extends UniLoginAppController {
 		$user = $this->request->query('user');
 		$timestamp = $this->request->query('timestamp');
 		$auth = $this->request->query('auth');
-		if ($user && $timestamp && $auth && (UniLoginUtil::hashEquals(UniLoginUtil::calculateFingerprint($timestamp, $user), $auth))) {
+
+		$fingerprint = UniLoginUtil::calculateFingerprint($timestamp, $user);
+
+		if ($user && $timestamp && $auth && UniLoginUtil::validateFingerprint($timestamp, $user, $fingerprint)) {
 			$response['validated'] = true;
 		} else {
 			$response['validated'] = false;
@@ -64,10 +68,11 @@ class UniLoginController extends UniLoginAppController {
 
 		$returnUrl = $this->request->query('returnUrl');
 		if ($returnUrl) {
-			$completeUrl = $returnUrl;
+			$path = parse_url($returnUrl, PHP_URL_PATH);
+			$completeUrl = $path;
 		}
 
-		$response['secret'] = Configure::read('UniLogin.application.secret');
+		$response['hmac'] = UniLoginUtil::hmac($response);
 
 		return $this->_dispatch($completeUrl, $response);
 	}
@@ -89,5 +94,4 @@ class UniLoginController extends UniLoginAppController {
 
 		$this->_stop();
 	}
-
 }

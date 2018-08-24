@@ -10,7 +10,7 @@ the educational sector.
 ## Requirements
 
 * CakePHP 2.6.0 or greater.
-* PHP 5.4.16 or greater.
+* PHP 5.6.0 or greater.
 
 ## Installation
 

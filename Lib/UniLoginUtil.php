@@ -41,6 +41,7 @@ class UniLoginUtil {
  * @param string $formattedTimestamp Uni-Login formatted timestamp
  * @param string $user A username
  * @return string A fingerprint
+ * @see https://en.wikipedia.org/wiki/Length_extension_attack
  */
 	public static function calculateFingerprint($formattedTimestamp, $user) {
 		$secret = Configure::read('UniLogin.provider.secret');
@@ -66,7 +67,7 @@ class UniLoginUtil {
 		// Given timestamp should be between 1 minute ago and now
 		if (($timestamp <= $now) && ($timestamp > strtotime(self::FINGERPRINT_TIMEOUT, $now))) {
 			// Check fingerprint
-			if (self::hashEquals(self::calculateFingerprint($formattedTimestamp, $user), $fingerprint)) {
+			if (hash_equals(self::calculateFingerprint($formattedTimestamp, $user), $fingerprint)) {
 				$isValid = true;
 			}
 		}
@@ -163,27 +164,18 @@ class UniLoginUtil {
  * @return bool Whether or not the fingerprint validates
  */
 	public static function validateUrlFingerprint($url, $fingerprint) {
-		return self::hashEquals(self::calculateUrlFingerprint($url), $fingerprint);
+		return hash_equals(self::calculateUrlFingerprint($url), $fingerprint);
 	}
 
 /**
- * Timing attack safe string comparison
+ * Calculates HMAC (sha256) for data.
  *
- *  Makes hash_equals functionality available in PHP < 5.6
- *
- * @param string $knownString The string of known length to compare against
- * @param string $userString The user-supplied string
- * @return bool Whether or not the two strings are equal
- * @see hash_equals
- * @suppress PhanTypeMismatchArgumentInternal
+ * @param array $data (Response) data
+ * @return string HMAC
  */
-	public static function hashEquals($knownString, $userString) {
-		if (!function_exists('hash_equals')) {
-			$ret = strlen($knownString) ^ strlen($userString);
-			$ret |= array_sum(unpack("C*", $knownString ^ $userString));
-			return !$ret;
-		}
-		return hash_equals($knownString, $userString);
-	}
+	public static function hmac(array $data = []) {
+		$secret = Configure::read('UniLogin.application.secret');
 
+		return hash_hmac('sha256', implode('-', $data), $secret);
+	}
 }
