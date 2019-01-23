@@ -5,6 +5,7 @@
 [![Coverage Status](https://codecov.io/gh/Oefenweb/cakephp-uni-login/branch/master/graph/badge.svg)](https://codecov.io/gh/Oefenweb/cakephp-uni-login)
 [![Packagist downloads](http://img.shields.io/packagist/dt/Oefenweb/cakephp-uni-login.svg)](https://packagist.org/packages/oefenweb/cakephp-uni-login)
 [![Code Climate](https://codeclimate.com/github/Oefenweb/cakephp-uni-login/badges/gpa.svg)](https://codeclimate.com/github/Oefenweb/cakephp-uni-login)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Oefenweb/cakephp-uni-login/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Oefenweb/cakephp-uni-login/?branch=master)
 
 This plugin handles (single sign on) authentication with
 [UNI•Login](http://www.stil.dk/It-og-administration/Brugere-og-adgangsstyring/For-laerere-og-elever). UNI•Login is a
